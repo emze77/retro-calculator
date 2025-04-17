@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    @font-face {
+        font-family: digital7;
+        src: url(./fonts/digital-7.ttf);
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Retro Calculator</title>
+</head>
+<body>
+
+<main id="calculator">
+    <div id="frame">
+    <section id="firstRow">
+        <button class="button medButton" id="btnDot">.</button>
+        <button class="button medButton" id="btnTakeResult">===</button>
+        <div class="display" id="resultDisplay"></div>
+        <button class="button medButton" id="btnClear">CLR</button>
+        <button class="button medButton" id="btnDelete">DEL</button>
+    </section>
+    <section id="secondRow">
+        <div class="display" id="firstOperatorDisplay"></div>
+        <button class="button smallButton" id="btnAdd">+</button>
+        <button class="button smallButton" id="btnSubstract">-</button>
+        <button class="button smallButton" id="btnDead">D</button>
+        <button class="button smallButton" id="btnMultiply">x</button>
+        <button class="button smallButton" id="btnDivide">/</button>
+        <div class="display" id="secondOperatorDisplay"></div>
+    </section>
+    <section id="thirdRow">
+            <button class="button smallButton" id="btn0">0</button>
+            <button class="button smallButton" id="btn1">1</button>
+            <button class="button smallButton" id="btn2">2</button>
+            <button class="button smallButton" id="btn3">3</button>
+            <button class="button smallButton" id="btn4">4</button>
+            <button class="button smallButton" id="btn5">5</button>
+            <button class="button smallButton" id="btn6">6</button>
+            <button class="button smallButton" id="btn7">7</button>
+            <button class="button smallButton" id="btn8">8</button>
+            <button class="button smallButton" id="btn9">9</button>
+            <button class="button smallButton" id="btn"></button>
+        <!-- <div id="extraButton">
+            <button class="button smallButton" id="btnAccept">V</button>
+        </div> -->
+    </section>
+</div>
+</main>
+<footer>
+
+</footer>
+<script src="calc.js"></script>
+
+</body>
+</html>
