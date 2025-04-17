@@ -15,7 +15,6 @@
 <body>
 
 <main id="calculator">
-    <div id="frame">
     <section id="firstRow">
         <button class="button medButton" id="btnDot">.</button>
         <button class="button medButton" id="btnTakeResult">===</button>
@@ -24,10 +23,13 @@
         <button class="button medButton" id="btnDelete">DEL</button>
     </section>
     <section id="secondRow">
-        <div class="display" id="firstOperatorDisplay"></div>
+        <div class="displayFrame">
+            <p>first operator</p>
+            <div class="display" id="firstOperatorDisplay"></div>
+        </div>
         <button class="button smallButton" id="btnAdd">+</button>
         <button class="button smallButton" id="btnSubstract">-</button>
-        <button class="button smallButton" id="btnDead">D</button>
+        <button class="button smallButton" id="btnDead">t</button>
         <button class="button smallButton" id="btnMultiply">x</button>
         <button class="button smallButton" id="btnDivide">/</button>
         <div class="display" id="secondOperatorDisplay"></div>
@@ -43,12 +45,11 @@
             <button class="button smallButton" id="btn7">7</button>
             <button class="button smallButton" id="btn8">8</button>
             <button class="button smallButton" id="btn9">9</button>
-            <button class="button smallButton" id="btn"></button>
+            <button class="button smallButton" id="btn">V</button>
         <!-- <div id="extraButton">
             <button class="button smallButton" id="btnAccept">V</button>
         </div> -->
     </section>
-</div>
 </main>
 <footer>
 
