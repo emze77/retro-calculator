@@ -21,9 +21,13 @@
 <main id="calculator">
     <section id="firstRow">
         <button class="button medButton" id="btnDot">.</button>
-        <button class="button medButton" id="btnTakeResult">===</button>
+        <button class="button medButton" id="btnTakeOver">===</button>
         <div class="displayFrame">
-            <p class="displayLabel">Result</p>
+            <p class="displayLabel">
+                <span class="led ledResult"></span>
+                Result
+                <span class="led ledResult"></span>
+            </p>
             <div class="display" id="resultDisplay"></div>
         </div>
         <button class="button medButton" id="btnClear">CLR</button>
@@ -31,16 +35,23 @@
     </section>
     <section id="secondRow">
         <div class="displayFrame">
-            <p class="displayLabel">first operator</p>
+            <p class="displayLabel">
+                <span class="led ledFirstOperator"></span>
+                first operator
+                <span class="led ledFirstOperator"></span>
+            </p>
             <div class="display" id="firstOperatorDisplay"></div>
         </div>
-        <button class="button smallButton" id="btnAdd">+</button>
-        <button class="button smallButton" id="btnSubstract">-</button>
-        <!-- <button class="button smallButton" id="btnDead">t</button> -->
-        <button class="button smallButton" id="btnMultiply">x</button>
-        <button class="button smallButton" id="btnDivide">/</button>
+        <button class="button operatorButton" id="btnAdd">+</button>
+        <button class="button operatorButton" id="btnSubstract">-</button>
+        <button class="button operatorButton" id="btnMultiply">x</button>
+        <button class="button operatorButton" id="btnDivide">/</button>
         <div class="displayFrame">
-            <p class="displayLabel">second operator</p>
+            <p class="displayLabel">
+                <span class="led ledSecondOperator"></span>
+                second operator
+                <span class="led ledSecondOperator"></span>
+            </p>
             <div class="display" id="secondOperatorDisplay"></div>
         </div>
     </section>
@@ -55,10 +66,7 @@
             <button class="button numberButton" id="btn7">7</button>
             <button class="button numberButton" id="btn8">8</button>
             <button class="button numberButton" id="btn9">9</button>
-            <button class="button numberButton" id="btnAccept">V</button>
-        <!-- <div id="extraButton">
-            <button class="button smallButton" id="btnAccept">V</button>
-        </div> -->
+            <button class="button" id="btnAccept">V</button>
     </section>
 </main>
 <footer>

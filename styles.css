@@ -35,44 +35,65 @@ main {
 }
 
 #thirdRow {
-    margin-top: 20px;
+    margin-top: 35px;
+}
+
+#firstRow {
+    margin-bottom: -15px
 }
 
 .displayFrame, .button {
     margin: 8px;
-    padding: 0;
     vertical-align: bottom;
-
 }
 
 .displayFrame {
-    /* border: 2px solid grey; */
-    text-align: center;
     display: inline-block;
+    height: 125px;
     margin-bottom: 5px;
     margin-top: 0px
     }
 
 .displayLabel {
-    margin-top: 5px;
-    margin-bottom: 8px;
-    padding: 0;
+    /* border: 2px solid white; */
     color: white;
     font-family: tempting;
     font-weight: 100;
     font-size: 1.3em;
+    /* padding-right: 20px; */
+    /* margin-top: -8px; */
+}
+
+.led {
+    display: inline-block;
+    border: 1px solid black;
+    background-color: rgb(27, 27, 27);
+    box-shadow: inset 0 0 6px black;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    /* border: 2px solid red; */
+    margin: 0 10px; 
+}
+
+.ledOn {
+    background-color: green;
 }
 
 
 .display {
+    /* border: 2px solid red */
     display: inline-block;
     width: 225px;
+    height: 50px;
+    line-height: 100%;
     background-color: #afab99;
     box-shadow: inset 0 0 7px  #4a4737;
     color: #4a4737;
-    height: 50px;
     font-family: digital7;
     text-align: end;
+    font-size: 2em;
+    padding-right: 12px;
   }
 
 #resultDisplay {
@@ -82,7 +103,7 @@ main {
 .button {
     color: white;
     background: rgba(0,0,0,0.1);
-    border: 2px solid black;
+    /* border: 20 solid black; */
     border-radius: 4px;
     box-shadow: inset 0 0 7px  #2c2c2c;
     font-weight: 600px;
@@ -94,7 +115,18 @@ main {
     height:50px;
 }
 
-.smallButton, .numberButton {
+.operatorButton, .numberButton, #btnAccept {
     width: 50px;
     height:50px;
+}
+
+#btnAccept {
+    background-color: rgba(55, 170, 55, 0.5);
+    /* border: 2px solid green; */
+    box-shadow: inset 0 0 6px green;
+}
+
+.highlightButton {
+    border: 2px solid green;
+    box-shadow: inset 0 0 6px green;
 }
