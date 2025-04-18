@@ -28,7 +28,8 @@ const BUTTONS = {
 
 const STATS = {
     inputFirstOperator: true,
-    operator: "",
+    operator: null,
+    resultMode: false,
 }
 
 BUTTONS.dot.addEventListener('click', makeDot);
@@ -36,19 +37,15 @@ BUTTONS.takeOver.addEventListener('click', takeOverResult);
 BUTTONS.clear.addEventListener('click', clear);
 BUTTONS.delete.addEventListener('click', deleteNumber);
 BUTTONS.accept.addEventListener('click', handleAccept)
-
 BUTTONS.numbers.forEach(button => 
-    button.addEventListener('click', () => appendNumber(button.textContent))
-)
-
+    button.addEventListener('click', () => appendNumber(button.textContent)))
 BUTTONS.operators.forEach(button =>
-    button.addEventListener('click', () => setOperator(button.textContent))
-)
+    button.addEventListener('click', () => setOperator(button.textContent)))
 
 toggleLed(1);
 
 function appendNumber (number) {
-    if (STATS.inputFirstOperator) {
+    if (STATS.inputFirstOperator && DISPLAY.firstOperator.) {
         DISPLAY.firstOperator.textContent += number;
     } else {
         DISPLAY.secondOperator.textContent += number;
@@ -64,16 +61,25 @@ function takeOverResult () {
 }
 
 function handleAccept () {
-
+    switch (true) {
+        case (STATS.inputFirstOperator && DISPLAY.firstOperator.textContent.length > 0):
+            switchInputToSecOp();
+            break;
+        case (STATS.resultMode):
+            clear();
+            break;
+        case ((DISPLAY.secondOperator.textContent.length > 0) && (STATS.operator !== null)):
+            operate();
+            break;
+    }
 }
 
 function clear () {
-    DISPLAY.firstOperator.textContent = "";
-    DISPLAY.secondOperator.textContent = "";
-    DISPLAY.result.textContent = "";
-    STATS.inputFirstOperator = true
+    resetDisplays();
+    switchInputToFirstOp();
     colorOperator(null);
-    toggleLed(1);
+    setOperator(null);
+    STATS.resultMode = false;
 }
 
 function deleteNumber () {
@@ -83,10 +89,7 @@ function deleteNumber () {
 function setOperator (operator) {
     STATS.operator = operator;
     colorOperator(operator);
-    if (DISPLAY.firstOperator.textContent.length > 0) {
-        STATS.inputFirstOperator = false;
-        toggleLed(2);
-    }
+    if (DISPLAY.firstOperator.textContent.length > 0) switchInputToSecOp();
     if (DISPLAY.secondOperator.textContent.length > 0) operate();
 }
 
@@ -112,5 +115,44 @@ function colorOperator (operator) {
 }
 
 function operate () {
+    let a = Number(DISPLAY.firstOperator.textContent);
+    let b = Number(DISPLAY.secondOperator.textContent);
+    let res = 0;
+    switch (STATS.operator) {
+        case "+":
+            res = a + b;
+            break;
+        case "-":
+            res = a - b;
+            break;
+        case "/":
+            res = a / b;
+            break;
+        case "x":
+            res = a * b;
+            break;
+    }
+    DISPLAY.result.textContent = Number(res.toFixed(2));
+    resultDisplayOn(true);
+}
 
+function resetDisplays () {
+    DISPLAY.firstOperator.textContent = "";
+    DISPLAY.secondOperator.textContent = "";
+    DISPLAY.result.textContent = "";
+}
+
+function switchInputToFirstOp () {
+    STATS.inputFirstOperator = true
+    toggleLed(1);
+}
+
+function switchInputToSecOp () {
+    STATS.inputFirstOperator = false;
+    toggleLed(2);
+}
+
+function resultDisplayOn () {
+    toggleLed(0);
+    STATS.resultMode = true
 }
