@@ -1,6 +1,18 @@
 /* script is inspired by michaelosman: 
 https://github.com/michalosman/calculator/ */
 
+const STATS = {
+    inputFirstOperator: true,
+    operator: null,
+    resultMode: false,
+    firstOperator: [],
+    secondOperator: [],
+    result: null,
+    get arrays() {
+        return [this.firstOperator, this.secondOperator]
+    }
+}
+
 const DISPLAY = {
     firstOperator: document.querySelector("#firstOperatorDisplay"),
     secondOperator: document.querySelector("#secondOperatorDisplay"),
@@ -26,14 +38,8 @@ const BUTTONS = {
     accept: document.querySelector("#btnAccept"),
 }
 
-const STATS = {
-    inputFirstOperator: true,
-    operator: null,
-    resultMode: false,
-}
-
 BUTTONS.dot.addEventListener('click', makeDot);
-BUTTONS.takeOver.addEventListener('click', takeOverResult);
+BUTTONS.takeOver.addEventListener('click', takeResultForFirstOp);
 BUTTONS.clear.addEventListener('click', clear);
 BUTTONS.delete.addEventListener('click', deleteNumber);
 BUTTONS.accept.addEventListener('click', handleAccept)
@@ -42,44 +48,62 @@ BUTTONS.numbers.forEach(button =>
 BUTTONS.operators.forEach(button =>
     button.addEventListener('click', () => setOperator(button.textContent)))
 
-toggleLed(1);
+// ---- logic ----
+
+function clear () {
+    resetOperators();
+    updateDisplay();
+    colorOperator(null);
+    setOperator(null);
+    resultDisplayOn(false);
+    switchInputToFirstOp();
+}
+
+function handleAccept () {
+    console.table(STATS);
+    switch (true) {
+        case (STATS.inputFirstOperator && STATS.firstOperator.length > 0):
+            switchInputToSecOp();
+            break;
+        case (STATS.resultMode):
+            clear();
+            break;
+        case (!STATS.inputFirstOperator && STATS.secondOperator.length > 0):
+            operate();
+            break;
+    }
+}
 
 function appendNumber (number) {
-    if (STATS.inputFirstOperator && DISPLAY.firstOperator.textContent.length <= 10)
-        DISPLAY.firstOperator.textContent += number;
-    if (!STATS.inputFirstOperator && DISPLAY.secondOperator.textContent.length <=10)
-        DISPLAY.secondOperator.textContent += number;
+    if (STATS.resultMode) clear();
+    if (STATS.inputFirstOperator && STATS.firstOperator.length <= 10)
+        STATS.firstOperator.push(number);
+    if (!STATS.inputFirstOperator && STATS.firstOperator.length <= 10)
+        STATS.secondOperator.push(number);
+    updateDisplay();
 }
 
 function makeDot () {
 
 }
 
-function takeOverResult () {
+let cache = toString(STATS.result).split("");
+STATS.firstOperator = cache;
+console.log("cachedOperator: " + STATS.firstOperator)
 
-}
 
-function handleAccept () {
-    switch (true) {
-        case (STATS.inputFirstOperator && DISPLAY.firstOperator.textContent.length > 0):
-            switchInputToSecOp();
-            break;
-        case (STATS.resultMode):
-            clear();
-            break;
-        case ((DISPLAY.secondOperator.textContent.length > 0) && (STATS.operator !== null)):
-            operate();
-            break;
+function takeResultForFirstOp () {
+    if (STATS.resultMode) {
+        let cache = STATS.result;
+        clear();
+        STATS.firstOperator = cache;
+        updateDisplay();
+        switchInputToSecOp;
+        console.log("to the end!")
     }
 }
 
-function clear () {
-    resetDisplays();
-    switchInputToFirstOp();
-    colorOperator(null);
-    setOperator(null);
-    STATS.resultMode = false;
-}
+
 
 function deleteNumber () {
 
@@ -88,8 +112,8 @@ function deleteNumber () {
 function setOperator (operator) {
     STATS.operator = operator;
     colorOperator(operator);
-    if (DISPLAY.firstOperator.textContent.length > 0) switchInputToSecOp();
-    if (DISPLAY.secondOperator.textContent.length > 0) operate();
+    if (STATS.firstOperator.length > 0) switchInputToSecOp();
+    if (STATS.secondOperator.length > 0) operate();
 }
 
 function toggleLed (number) {
@@ -114,8 +138,8 @@ function colorOperator (operator) {
 }
 
 function operate () {
-    let a = Number(DISPLAY.firstOperator.textContent);
-    let b = Number(DISPLAY.secondOperator.textContent);
+    let a = Number(STATS.firstOperator.join(""));
+    let b = Number(STATS.secondOperator.join(""));
     let res = 0;
     switch (STATS.operator) {
         case "+":
@@ -131,14 +155,22 @@ function operate () {
             res = a * b;
             break;
     }
-    DISPLAY.result.textContent = Number(res.toFixed(2));
+    STATS.result = Array.from(String(res));
+    console.log("STATS.result: " + STATS.result)
+    // STATS.result = Number(res.toFixed(2))
+    updateDisplay()
     resultDisplayOn(true);
 }
 
-function resetDisplays () {
-    DISPLAY.firstOperator.textContent = "";
-    DISPLAY.secondOperator.textContent = "";
-    DISPLAY.result.textContent = "";
+function resetOperators () {
+    STATS.arrays.forEach((e) => e.length = 0);
+    STATS.result = null;
+}
+
+function updateDisplay () {
+    DISPLAY.firstOperator.textContent = STATS.firstOperator.join("");
+    DISPLAY.secondOperator.textContent = STATS.secondOperator.join("");
+    DISPLAY.result.textContent = STATS.result;
 }
 
 function switchInputToFirstOp () {
@@ -151,7 +183,7 @@ function switchInputToSecOp () {
     toggleLed(2);
 }
 
-function resultDisplayOn () {
-    toggleLed(0);
-    STATS.resultMode = true
+function resultDisplayOn (state) {
+    STATS.resultMode = state
+    if (state) toggleLed(0);
 }
