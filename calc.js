@@ -45,11 +45,10 @@ BUTTONS.operators.forEach(button =>
 toggleLed(1);
 
 function appendNumber (number) {
-    if (STATS.inputFirstOperator && DISPLAY.firstOperator.) {
+    if (STATS.inputFirstOperator && DISPLAY.firstOperator.textContent.length <= 10)
         DISPLAY.firstOperator.textContent += number;
-    } else {
+    if (!STATS.inputFirstOperator && DISPLAY.secondOperator.textContent.length <=10)
         DISPLAY.secondOperator.textContent += number;
-    }
 }
 
 function makeDot () {
