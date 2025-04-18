@@ -22,33 +22,38 @@ const LED = {
     }
 }
 
-const BUTTONS = {
-    // numbers: document.querySelectorAll(".numberButton"),
-    operators: document.querySelectorAll(".operatorButton"),
-    dot: document.querySelector("#btnDot"),
-    takeOver: document.querySelector("#btnTakeOver"),
-    clear: document.querySelector("#btnClear"),
-    delete: document.querySelector("#btnDelete"),
-    accept: document.querySelector("#btnAccept"),
-}
 
+const opButtons = document.querySelectorAll(".operatorButton");
+opButtons.forEach(button =>
+    button.addEventListener('click', () => setOperator(button.textContent)));
 document.querySelectorAll(".numberButton").forEach(button => 
     button.addEventListener('click', () => appendNumber(button.textContent)));
+    
+onClick ("#btnDot", () => appendNumber("."));
+onClick ("#btnTakeOver", takeResultForFirstOp);
+onClick ("#btnClear", clear);
+onClick ("#btnDelete", deleteNumber);
+onClick ("#btnAccept", handleAccept)
+
+
+
+
+// const BUTTONS_INPUT = [
+//     document.querySelectorAll(".numberButton").forEach(button => 
+//         button.addEventListener('click', () => appendNumber(button.textContent))),
+//     document.querySelectorAll(".operatorButton").forEach(button =>
+//         button.addEventListener('click', () => setOperator(button.textContent))),
+//     document.querySelector("#btnDot").addEventListener('click', () => appendNumber(".")),
+//     document.querySelector("#btnTakeOver").addEventListener('click', takeResultForFirstOp),
+//     document.querySelector("#btnClear").addEventListener('click', clear),
+//     document.querySelector("#btnDelete").addEventListener('click', deleteNumber),
+//     document.querySelector("#btnAccept").addEventListener('click', handleAccept),
+// ]
 
 const ERROR = {
     toolong: "too long!",
     divide0: "Don't do this!"
 }
-
-BUTTONS.takeOver.addEventListener('click', takeResultForFirstOp);
-BUTTONS.clear.addEventListener('click', clear);
-BUTTONS.delete.addEventListener('click', deleteNumber);
-BUTTONS.accept.addEventListener('click', handleAccept);
-// BUTTONS.numbers.forEach(button => 
-//     button.addEventListener('click', () => appendNumber(button.textContent)));
-BUTTONS.dot.addEventListener('click', () => appendNumber("."));
-BUTTONS.operators.forEach(button =>
-    button.addEventListener('click', () => setOperator(button.textContent)));
 
 // === PURE LOGIC ===
 
@@ -169,7 +174,7 @@ function toggleLed (number) {
 }
 
 function colorOperator (operator) {
-    BUTTONS.operators.forEach((item) => {
+    opButtons.forEach((item) => {
         if (item.textContent === operator) {
             item.classList.add("highlightButton");
         } else {
@@ -180,7 +185,12 @@ function colorOperator (operator) {
 }
 
 
-// === SMALL HELPERS ===
+// === HELPERS ===
+
+function onClick (selector, handler) {
+    const el = document.querySelector(selector);
+    if (el) el.addEventListener('click', handler); 
+}
 
 function switchInputToFirstOp () {
     STATS.inputFirstOperator = true
