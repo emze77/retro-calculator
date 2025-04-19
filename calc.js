@@ -1,3 +1,14 @@
+const STATS = {
+    inputFirstOperator: true,
+    operator: null,
+    resultMode: false,
+    firstOperator: "",
+    secondOperator: "",
+    result: "",
+}
+
+const originalStats = structuredClone(STATS);
+
 const DISPLAY = {
     firstOperator: document.querySelector("#firstOperatorDisplay"),
     secondOperator: document.querySelector("#secondOperatorDisplay"),
@@ -12,18 +23,6 @@ const LED = {
         return [this.result, this.firstOperator, this.secondOperator];
     }
 }
-
-const STATS = {
-    inputFirstOperator: true,
-    operator: null,
-    resultMode: false,
-    firstOperator: "",
-    secondOperator: "",
-    result: "",
-}
-
-const originalStats = structuredClone(STATS);
-
 
 const ERROR = {
     toolong: "too long!",
@@ -66,18 +65,16 @@ function clear () {
     updateDisplay();
 }
 
-
 function handleAccept () {
-    switch (true) {
-        case (STATS.inputFirstOperator && STATS.firstOperator.length > 0):
-            switchInputToSecOp();
-            break;
-        case (STATS.resultMode):
-            takeResultForFirstOp();
-            break;
-        case (!STATS.inputFirstOperator && STATS.secondOperator.length > 0):
-            operate();
-            break;
+    if (STATS.inputFirstOperator && STATS.firstOperator.length > 0) {
+        switchInputToSecOp();
+    } else if (STATS.resultMode) {
+        takeResultForFirstOp();
+    } else if (STATS.secondOperator === "0" && STATS.operator === "/"){
+        throwErrow("divide0");
+        updateDisplay();
+    } else if (!STATS.inputFirstOperator && STATS.secondOperator.length > 0) {
+        operate();
     }
 }
 
@@ -104,11 +101,20 @@ function setOperator (operator) {
     STATS.operator = operator;
     colorOperator(operator);
     if (STATS.firstOperator.length > 0) switchInputToSecOp();
-    if (STATS.secondOperator.length > 0) operate();
+    if (STATS.secondOperator === "0" && STATS.operator === "/") {
+        throwErrow("divide0");
+    } else if (STATS.secondOperator.length > 0) {
+        operate();
+    }
+   
 }
 
 function deleteNumber () {
-
+    if (STATS.inputFirstOperator)
+        STATS.firstOperator = STATS.firstOperator.slice(0, -1); 
+    if (!STATS.inputFirstOperator);
+        STATS.secondOperator = STATS.secondOperator.slice(0, -1); 
+    updateDisplay();
 }
 
 // ==== MATHY STUFF ===
@@ -171,8 +177,7 @@ function colorOperator (operator) {
             item.classList.remove("highlightButton");
         }
     }
-)
-}
+)}
 
 
 // === HELPERS ===
@@ -198,16 +203,17 @@ function resultDisplayOn (state) {
 }
 
 function throwErrow (error) {
-    STATS.errorMode = true;
+    // STATS.errorMode = true;
     STATS.result = ERROR[error]
+    updateDisplay();
 }
 
-function resetErrorMode () {
-    STATS.errorMode = false;
-}
+// function resetErrorMode () {
+//     STATS.errorMode = false;
+// }
 
-function resetOperators () {
-    STATS.result = "";
-    STATS.firstOperator = "";
-    STATS.secondOperator = "";
-}
+// function resetOperators () {
+//     STATS.result = "";
+//     STATS.firstOperator = "";
+//     STATS.secondOperator = "";
+// }
