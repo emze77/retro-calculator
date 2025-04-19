@@ -1,14 +1,3 @@
-const STATS = {
-    inputFirstOperator: true,
-    operator: null,
-    resultMode: false,
-    firstOperator: "",
-    secondOperator: "",
-    result: "",
-}
-
-const originalStats = structuredClone(STATS);
-
 const DISPLAY = {
     firstOperator: document.querySelector("#firstOperatorDisplay"),
     secondOperator: document.querySelector("#secondOperatorDisplay"),
@@ -24,6 +13,18 @@ const LED = {
     }
 }
 
+const STATS = {
+    inputFirstOperator: true,
+    operator: null,
+    resultMode: false,
+    firstOperator: "",
+    secondOperator: "",
+    result: "",
+}
+
+const originalStats = structuredClone(STATS);
+
+
 const ERROR = {
     toolong: "too long!",
     divide0: "Don't do this!"
@@ -31,9 +32,9 @@ const ERROR = {
 
 // === BUTTON CONSTROL ===
 
-const opButtons = document.querySelectorAll(".operatorButton");
+const operatorButton = document.querySelectorAll(".operatorButton");
 
-opButtons.forEach(button =>
+operatorButton.forEach(button =>
     button.addEventListener('click', () => setOperator(button.textContent)));
 document.querySelectorAll(".numberButton").forEach(button => 
     button.addEventListener('click', () => appendNumber(button.textContent)));
@@ -59,16 +60,11 @@ function operate () {
 
 
 function clear () {
-    STATS = originalStats.map((el) => el)
-    // resetOperators();
+    Object.assign(STATS, originalStats);
+    toggleLed(1);
+    colorOperator();
     updateDisplay();
-    colorOperator(null);
-    setOperator(null);
-    resultDisplayOn(false);
-    switchInputToFirstOp();
-    resetErrorMode();
 }
-// Möglichkeit auf Original-Zustand zurücksetzen??
 
 
 function handleAccept () {
@@ -168,7 +164,7 @@ function toggleLed (number) {
 }
 
 function colorOperator (operator) {
-    opButtons.forEach((item) => {
+    operatorButton.forEach((item) => {
         if (item.textContent === operator) {
             item.classList.add("highlightButton");
         } else {
