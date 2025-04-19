@@ -76,9 +76,6 @@ main {
     margin: 0 10px; 
 }
 
-.ledOn {
-    background-color: green;
-}
 
 
 .display {
@@ -123,7 +120,19 @@ main {
     box-shadow: inset 0 0 6px green;
 }
 
+#btnTakeOver, #btnDot {
+    font-size: 1.5em;
+}
+
 .highlightButton {
     border: 2px solid green;
     box-shadow: inset 0 0 6px green;
+}
+
+.ledGreen {
+    background-color: green;
+}
+
+.ledRed {
+    background-color: red;
 }

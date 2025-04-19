@@ -5,6 +5,7 @@ const STATS = {
     firstOperator: "",
     secondOperator: "",
     result: "",
+    ledNum: [1, "green"],
 }
 
 const originalStats = structuredClone(STATS);
@@ -60,7 +61,7 @@ function operate () {
 
 function clear () {
     Object.assign(STATS, originalStats);
-    toggleLed(1);
+    toggleLed(1, "green");
     colorOperator();
     updateDisplay();
 }
@@ -92,8 +93,12 @@ function appendNumber (number) {
     if (STATS.resultMode) clear();
     if (STATS.inputFirstOperator && STATS.firstOperator.length <= 10)
         STATS.firstOperator += number;
+    if (STATS.firstOperator.length === 10 && STATS.ledNum[0] === 1)
+        toggleLed(1, "red");
     if (!STATS.inputFirstOperator && STATS.secondOperator.length <= 10)
         STATS.secondOperator += number;
+    if (STATS.secondOperator.length === 10 && STATS.ledNum[1] === 1)
+        toggleLed(1, "red");
     updateDisplay();
 }
 
@@ -159,14 +164,25 @@ function updateDisplay () {
     DISPLAY.result.textContent = STATS.result;
 }
 
-function toggleLed (number) {
-    LED.list.forEach((item, index) =>  {
-        if (index === number) {
-            item.forEach((e) => e.classList.add("ledOn"))
-        } else {
-            item.forEach((e) => e.classList.remove("ledOn"))
-        }
-    })
+function toggleLed (number, color) {
+    LED.state = [number, color];
+    if (color === "red") {
+        LED.list.forEach((item, index) =>  {
+            if (index === number) {
+                item.forEach((e) => e.classList.add("ledRed"))
+            } else {
+                item.forEach((e) => e.classList.remove("ledGreen", "ledRed"))
+            }
+        })
+    } else {
+        console.log("green-led: " + LED.state)
+        LED.list.forEach((item, index) =>  {
+            if (index === number) {
+                item.forEach((e) => e.classList.add("ledGreen"))
+            } else {
+                item.forEach((e) => e.classList.remove("ledGreen", "ledRed"))
+            }
+    })}
 }
 
 function colorOperator (operator) {
@@ -189,17 +205,17 @@ function onClick (selector, handler) {
 
 function switchInputToFirstOp () {
     STATS.inputFirstOperator = true
-    toggleLed(1);
+    toggleLed(1, "green");
 }
 
 function switchInputToSecOp () {
     STATS.inputFirstOperator = false;
-    toggleLed(2);
+    toggleLed(2, "green");
 }
 
 function resultDisplayOn (state) {
     STATS.resultMode = state
-    if (state) toggleLed(0);
+    if (state) toggleLed(0, "green");
 }
 
 function throwErrow (error) {
