@@ -7,6 +7,8 @@ const STATS = {
     result: "",
 }
 
+const originalStats = structuredClone(STATS);
+
 const DISPLAY = {
     firstOperator: document.querySelector("#firstOperatorDisplay"),
     secondOperator: document.querySelector("#secondOperatorDisplay"),
@@ -22,8 +24,15 @@ const LED = {
     }
 }
 
+const ERROR = {
+    toolong: "too long!",
+    divide0: "Don't do this!"
+}
+
+// === BUTTON CONSTROL ===
 
 const opButtons = document.querySelectorAll(".operatorButton");
+
 opButtons.forEach(button =>
     button.addEventListener('click', () => setOperator(button.textContent)));
 document.querySelectorAll(".numberButton").forEach(button => 
@@ -36,36 +45,7 @@ onClick ("#btnDelete", deleteNumber);
 onClick ("#btnAccept", handleAccept)
 
 
-
-
-// const BUTTONS_INPUT = [
-//     document.querySelectorAll(".numberButton").forEach(button => 
-//         button.addEventListener('click', () => appendNumber(button.textContent))),
-//     document.querySelectorAll(".operatorButton").forEach(button =>
-//         button.addEventListener('click', () => setOperator(button.textContent))),
-//     document.querySelector("#btnDot").addEventListener('click', () => appendNumber(".")),
-//     document.querySelector("#btnTakeOver").addEventListener('click', takeResultForFirstOp),
-//     document.querySelector("#btnClear").addEventListener('click', clear),
-//     document.querySelector("#btnDelete").addEventListener('click', deleteNumber),
-//     document.querySelector("#btnAccept").addEventListener('click', handleAccept),
-// ]
-
-const ERROR = {
-    toolong: "too long!",
-    divide0: "Don't do this!"
-}
-
 // === PURE LOGIC ===
-
-function clear () {
-    resetOperators();
-    updateDisplay();
-    colorOperator(null);
-    setOperator(null);
-    resultDisplayOn(false);
-    switchInputToFirstOp();
-    resetErrorMode();
-}
 
 function operate () {
     calculate();
@@ -76,6 +56,20 @@ function operate () {
 
 
 // === BUTTON FUNCTIONS ===
+
+
+function clear () {
+    STATS = originalStats.map((el) => el)
+    // resetOperators();
+    updateDisplay();
+    colorOperator(null);
+    setOperator(null);
+    resultDisplayOn(false);
+    switchInputToFirstOp();
+    resetErrorMode();
+}
+// Möglichkeit auf Original-Zustand zurücksetzen??
+
 
 function handleAccept () {
     switch (true) {
