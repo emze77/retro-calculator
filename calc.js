@@ -91,14 +91,14 @@ function takeResultForFirstOp () {
 
 function appendNumber (number) {
     if (STATS.resultMode) clear();
-    if (STATS.inputFirstOperator && STATS.firstOperator.length <= 10)
+    if (STATS.inputFirstOperator && STATS.firstOperator.length < 10) {
         STATS.firstOperator += number;
-    if (STATS.firstOperator.length === 10 && STATS.ledNum[0] === 1)
-        toggleLed(1, "red");
-    if (!STATS.inputFirstOperator && STATS.secondOperator.length <= 10)
+        if (STATS.firstOperator.length === 10) toggleLed(1, "red");
+    }
+    if (!STATS.inputFirstOperator && STATS.secondOperator.length < 10) {
         STATS.secondOperator += number;
-    if (STATS.secondOperator.length === 10 && STATS.ledNum[1] === 1)
-        toggleLed(1, "red");
+        if (STATS.secondOperator.length === 10) toggleLed(2, "red");
+    }
     updateDisplay();
 }
 
@@ -145,7 +145,7 @@ function calculate () {
     STATS.result = res;
 }
 
-function convertResult (res) {
+function convertResult () {
     STATS.result = Number((STATS.result).toFixed(2)).toString();
     if (STATS.result.length <= 10) {
         STATS.result = STATS.result;
@@ -219,17 +219,7 @@ function resultDisplayOn (state) {
 }
 
 function throwErrow (error) {
-    // STATS.errorMode = true;
-    STATS.result = ERROR[error]
+    STATS.result = ERROR[error];
+    toggleLed(0, "red")
     updateDisplay();
 }
-
-// function resetErrorMode () {
-//     STATS.errorMode = false;
-// }
-
-// function resetOperators () {
-//     STATS.result = "";
-//     STATS.firstOperator = "";
-//     STATS.secondOperator = "";
-// }
