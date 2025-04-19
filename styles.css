@@ -129,10 +129,10 @@ main {
     box-shadow: inset 0 0 6px green;
 }
 
-.ledGreen {
+.green {
     background-color: green;
 }
 
-.ledRed {
+.red {
     background-color: red;
 }

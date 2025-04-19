@@ -5,7 +5,7 @@ const STATS = {
     firstOperator: "",
     secondOperator: "",
     result: "",
-    ledNum: [1, "green"],
+    leds: [1, "green"],
 }
 
 const originalStats = structuredClone(STATS);
@@ -46,18 +46,12 @@ onClick ("#btnDelete", deleteNumber);
 onClick ("#btnAccept", handleAccept)
 
 
-// === PURE LOGIC ===
-
 function operate () {
     calculate();
     convertResult();
     updateDisplay();
     resultDisplayOn(true);
 }
-
-
-// === BUTTON FUNCTIONS ===
-
 
 function clear () {
     Object.assign(STATS, originalStats);
@@ -80,7 +74,8 @@ function handleAccept () {
 }
 
 function takeResultForFirstOp () {
-    if (STATS.resultMode) {
+    if (STATS.resultMode && !isNaN(Number(STATS.result))) {
+        console.log(isNaN(Number(STATS.result)));
         let cache = STATS.result;
         clear();
         STATS.firstOperator = cache;
@@ -111,7 +106,6 @@ function setOperator (operator) {
     } else if (STATS.secondOperator.length > 0) {
         operate();
     }
-   
 }
 
 function deleteNumber () {
@@ -121,8 +115,6 @@ function deleteNumber () {
         STATS.secondOperator = STATS.secondOperator.slice(0, -1); 
     updateDisplay();
 }
-
-// ==== MATHY STUFF ===
 
 function calculate () {
     let a = Number(STATS.firstOperator);
@@ -154,10 +146,6 @@ function convertResult () {
     }
 }
 
-
-
-// ==== DISPLAY ====
-
 function updateDisplay () {
     DISPLAY.firstOperator.textContent = STATS.firstOperator;
     DISPLAY.secondOperator.textContent = STATS.secondOperator;
@@ -165,24 +153,13 @@ function updateDisplay () {
 }
 
 function toggleLed (number, color) {
-    LED.state = [number, color];
-    if (color === "red") {
-        LED.list.forEach((item, index) =>  {
-            if (index === number) {
-                item.forEach((e) => e.classList.add("ledRed"))
-            } else {
-                item.forEach((e) => e.classList.remove("ledGreen", "ledRed"))
-            }
-        })
+    STATS.leds = [number, color];
+    LED.list.forEach((item, index) =>  {
+    if (index === number) {
+        item.forEach((e) => e.classList.add(STATS.leds[1]))
     } else {
-        console.log("green-led: " + LED.state)
-        LED.list.forEach((item, index) =>  {
-            if (index === number) {
-                item.forEach((e) => e.classList.add("ledGreen"))
-            } else {
-                item.forEach((e) => e.classList.remove("ledGreen", "ledRed"))
-            }
-    })}
+        item.forEach((e) => e.classList.remove("red", "green"))
+    }})
 }
 
 function colorOperator (operator) {
@@ -192,11 +169,8 @@ function colorOperator (operator) {
         } else {
             item.classList.remove("highlightButton");
         }
-    }
-)}
-
-
-// === HELPERS ===
+    })
+}
 
 function onClick (selector, handler) {
     const el = document.querySelector(selector);
