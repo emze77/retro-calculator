@@ -12,3 +12,14 @@ Interpretation of The Odin Project calculator project.
 * Basic use of objects.
 * Basic seperation of Logic and math.
 * 
+
+
+## PSEUDOCODE-TIMER
+- start @ page-load / press button
+- after 30 sec.: start waiting function.
+    1. Gehe durch Array: 
+    1. 2x toggle current LED
+    2. 2x toggle next LED
+    3. 2x toggle third LED.
+- restart timer
+Every Button click: Ends function.

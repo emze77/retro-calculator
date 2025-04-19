@@ -1,22 +1,5 @@
-const STATS = {
-    inputFirstOperator: true,
-    operator: null,
-    resultMode: false,
-    firstOperator: "",
-    secondOperator: "",
-    result: "",
-    leds: [1, "green"],
-}
-
-const originalStats = structuredClone(STATS);
-
-const DISPLAY = {
-    firstOperator: document.querySelector("#firstOperatorDisplay"),
-    secondOperator: document.querySelector("#secondOperatorDisplay"),
-    result: document.querySelector("#resultDisplay"),
-}
-
 const LED = {
+    colors: ["out", "green", "red"],
     result: document.querySelectorAll(".ledResult"),
     firstOperator: document.querySelectorAll(".ledFirstOperator"),
     secondOperator: document.querySelectorAll(".ledSecondOperator"),
@@ -25,12 +8,37 @@ const LED = {
     }
 }
 
+const STATS = {
+    inputFirstOperator: true,
+    operator: null,
+    resultMode: false,
+    firstOperator: "",
+    secondOperator: "",
+    result: "",
+    leds: [1, 1],
+    waitingTimeout: null,
+    prepareShow: false,
+    waiting: true,
+    waitingCounter: 0,
+    waitingArray: [0, null , 0, null , 1, null, 1, null, 2, null, 2, null],
+    waitingColor: [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+}
+
+const originalStats = structuredClone(STATS);
+let waiting_STATS = {};
+
+const DISPLAY = {
+    firstOperator: document.querySelector("#firstOperatorDisplay"),
+    secondOperator: document.querySelector("#secondOperatorDisplay"),
+    result: document.querySelector("#resultDisplay"),
+}
+
+
+
 const ERROR = {
     toolong: "too long!",
     divide0: "Don't do this!"
 }
-
-// === BUTTON CONSTROL ===
 
 const operatorButton = document.querySelectorAll(".operatorButton");
 
@@ -38,7 +46,9 @@ operatorButton.forEach(button =>
     button.addEventListener('click', () => setOperator(button.textContent)));
 document.querySelectorAll(".numberButton").forEach(button => 
     button.addEventListener('click', () => appendNumber(button.textContent)));
-    
+document.querySelectorAll(".button").forEach(button =>
+    button.addEventListener('click', () => waitingTimer()))
+
 onClick ("#btnDot", () => appendNumber("."));
 onClick ("#btnTakeOver", takeResultForFirstOp);
 onClick ("#btnClear", clear);
@@ -55,7 +65,7 @@ function operate () {
 
 function clear () {
     Object.assign(STATS, originalStats);
-    toggleLed(1, "green");
+    toggleLed(1, 1);
     colorOperator();
     updateDisplay();
 }
@@ -88,11 +98,11 @@ function appendNumber (number) {
     if (STATS.resultMode) clear();
     if (STATS.inputFirstOperator && STATS.firstOperator.length < 10) {
         STATS.firstOperator += number;
-        if (STATS.firstOperator.length === 10) toggleLed(1, "red");
+        if (STATS.firstOperator.length === 10) toggleLed(1, 2);
     }
     if (!STATS.inputFirstOperator && STATS.secondOperator.length < 10) {
         STATS.secondOperator += number;
-        if (STATS.secondOperator.length === 10) toggleLed(2, "red");
+        if (STATS.secondOperator.length === 10) toggleLed(2, 2);
     }
     updateDisplay();
 }
@@ -154,11 +164,12 @@ function updateDisplay () {
 
 function toggleLed (number, color) {
     STATS.leds = [number, color];
+    console.log("Stats.leds: " + STATS.leds)
     LED.list.forEach((item, index) =>  {
     if (index === number) {
-        item.forEach((e) => e.classList.add(STATS.leds[1]))
+        item.forEach((e) => e.classList.add(LED.colors[color]))
     } else {
-        item.forEach((e) => e.classList.remove("red", "green"))
+        item.forEach((e) => e.classList.remove(LED.colors[0], LED.colors[1], LED.colors[2]))
     }})
 }
 
@@ -172,6 +183,38 @@ function colorOperator (operator) {
     })
 }
 
+// ==== WAITING =====
+
+function waitingTimer () {
+    if (!STATS.prepareShow) {
+        STATS.prepareShow = true;
+        waiting_STATS = structuredClone(STATS);
+        console.table(waiting_STATS);
+        console.log("timer läuft");
+        STATS.waitingTimeout = setTimeout(waiting, 5000);
+    } else {
+        clearTimeout(STATS.waitingTimeout);
+        STATS.prepareShow = false;
+        waitingTimer();
+    }
+}
+
+function waiting (numberCache, colorCache) {
+    console.log("Waiting rennt! ")
+    toggleLed(STATS.waitingArray[STATS.waitingCounter], 
+        STATS.waitingColor[STATS.waitingCounter]);
+    if (STATS.waitingCounter < STATS.waitingArray.length) {
+        STATS.waitingCounter++;
+        setTimeout(waiting, 500);
+    } else {
+        STATS.waitingCounter = 0;
+        toggleLed(waiting_STATS.leds[0], waiting_STATS.leds[1]);
+    };
+}
+
+
+// ==== HELPERS ====
+
 function onClick (selector, handler) {
     const el = document.querySelector(selector);
     if (el) el.addEventListener('click', handler); 
@@ -179,21 +222,21 @@ function onClick (selector, handler) {
 
 function switchInputToFirstOp () {
     STATS.inputFirstOperator = true
-    toggleLed(1, "green");
+    toggleLed(1, 1);
 }
 
 function switchInputToSecOp () {
     STATS.inputFirstOperator = false;
-    toggleLed(2, "green");
+    toggleLed(2, 1);
 }
 
 function resultDisplayOn (state) {
     STATS.resultMode = state
-    if (state) toggleLed(0, "green");
+    if (state) toggleLed(0, 1);
 }
 
 function throwErrow (error) {
     STATS.result = ERROR[error];
-    toggleLed(0, "red")
+    toggleLed(0, 2)
     updateDisplay();
 }
