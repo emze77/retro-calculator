@@ -117,10 +117,12 @@ function takeResultForFirstOp () {
 function appendNumber (number) {
     if (STATS.resultMode) clear();
     if (STATS.inputFirstOperator && STATS.firstOperator.length < 10) {
+        if (STATS.firstOperator.length === 0 && number === "0") return;
         STATS.firstOperator += number;
         if (STATS.firstOperator.length === 10) toggleLed(1, 2);
     }
     if (!STATS.inputFirstOperator && STATS.secondOperator.length < 10) {
+        if (STATS.secondOperator.length === 0 && number === "0") return;
         STATS.secondOperator += number;
         if (STATS.secondOperator.length === 10) toggleLed(2, 2);
     }
