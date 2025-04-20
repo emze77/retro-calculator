@@ -66,7 +66,8 @@ document.addEventListener('keydown', (el) => {
         handleAccept();
     } else if (["/", "*", "x", "+", "-"].includes(el.key)) {
         setOperator(el.key)    
-        }
+    }
+    waitingTimer();
     })
 
 window.addEventListener('load', () => {
