@@ -1,13 +1,3 @@
-const LED = {
-    colors: ["out", "green", "red"],
-    result: document.querySelectorAll(".ledResult"),
-    firstOperator: document.querySelectorAll(".ledFirstOperator"),
-    secondOperator: document.querySelectorAll(".ledSecondOperator"),
-    get list() {
-        return [this.result, this.firstOperator, this.secondOperator];
-    }
-}
-
 const STATS = {
     inputFirstOperator: true,
     operator: null,
@@ -16,12 +6,24 @@ const STATS = {
     secondOperator: "",
     result: "",
     leds: [1, 1],
-    waitingTimeout: null,
-    prepareShow: false,
-    waiting: true,
+    waitingPhase: false,
     waitingCounter: 0,
-    waitingArray: [0, null , 0, null , 1, null, 1, null, 2, null, 2, null],
-    waitingColor: [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+    waitingArray: [],
+}
+
+const TIMEOUTS = {
+    waiting: undefined,
+    impuls: undefined,
+}
+
+const LED = {
+    colors: ["out", "green", "red"],
+    result: document.querySelectorAll(".ledResult"),
+    firstOperator: document.querySelectorAll(".ledFirstOperator"),
+    secondOperator: document.querySelectorAll(".ledSecondOperator"),
+    get list() {
+        return [this.result, this.firstOperator, this.secondOperator];
+    }
 }
 
 const originalStats = structuredClone(STATS);
@@ -85,10 +87,11 @@ function handleAccept () {
 
 function takeResultForFirstOp () {
     if (STATS.resultMode && !isNaN(Number(STATS.result))) {
-        console.log(isNaN(Number(STATS.result)));
+        console.table(STATS);
         let cache = STATS.result;
         clear();
         STATS.firstOperator = cache;
+        console.table(STATS);
         updateDisplay();
         switchInputToSecOp();
     }
@@ -164,7 +167,6 @@ function updateDisplay () {
 
 function toggleLed (number, color) {
     STATS.leds = [number, color];
-    console.log("Stats.leds: " + STATS.leds)
     LED.list.forEach((item, index) =>  {
     if (index === number) {
         item.forEach((e) => e.classList.add(LED.colors[color]))
@@ -186,31 +188,63 @@ function colorOperator (operator) {
 // ==== WAITING =====
 
 function waitingTimer () {
-    if (!STATS.prepareShow) {
-        STATS.prepareShow = true;
-        waiting_STATS = structuredClone(STATS);
-        console.table(waiting_STATS);
-        console.log("timer läuft");
-        STATS.waitingTimeout = setTimeout(waiting, 5000);
-    } else {
-        clearTimeout(STATS.waitingTimeout);
-        STATS.prepareShow = false;
-        waitingTimer();
+    if (typeof TIMEOUTS.waiting === "number")
+        clearTimeout(TIMEOUTS.waiting)
+    if (STATS.waitingPhase) {
+        if (typeof TIMEOUTS.impuls === "number") 
+            clearTimeout(TIMEOUTS.impuls);
     }
+    waiting_STATS = structuredClone(STATS);
+    createBlinkTable();
+    TIMEOUTS.waiting = setTimeout(waiting, 5000);
+}
+
+function createBlinkTable () {
+    STATS.waitingArray = [];
+    let twoTimes = false;
+    for (i = 0; i <= 12; i++) {
+        if (i % 2) {
+            STATS.waitingArray.push([null, 0]);
+        } else {
+            STATS.waitingArray.push([STATS.leds[0], STATS.leds[1]]);
+            if (twoTimes) {
+                STATS.leds[0]++;
+                if (STATS.leds[0] === 3) STATS.leds[0] = 0;
+                twoTimes = false;
+            } else {
+                twoTimes = true;
+            }
+        }
+    }
+    console.table(STATS.waitingArray);
+    twoTimes = false;
 }
 
 function waiting (numberCache, colorCache) {
-    console.log("Waiting rennt! ")
-    toggleLed(STATS.waitingArray[STATS.waitingCounter], 
-        STATS.waitingColor[STATS.waitingCounter]);
-    if (STATS.waitingCounter < STATS.waitingArray.length) {
+    STATS.waitingPhase = true;
+    toggleLed(
+        STATS.waitingArray[STATS.waitingCounter][0], 
+        STATS.waitingArray[STATS.waitingCounter][1]);
+    if (STATS.waitingCounter < 12) {
         STATS.waitingCounter++;
-        setTimeout(waiting, 500);
+        TIMEOUTS.impuls = setTimeout(waiting, 500);
     } else {
+        if (typeof TIMEOUTS.impuls === "number") {
+            clearTimeout(TIMEOUTS.impuls)}
         STATS.waitingCounter = 0;
+        STATS.waitingArray = [];
+        STATS.waitingPhase = false;
         toggleLed(waiting_STATS.leds[0], waiting_STATS.leds[1]);
-    };
+    }
 }
+
+
+// i = STATs.leds[0]; i <= 12; i++ 
+// jedes zweite: [null, 0],
+// dazwischen: 
+// waitingCounter: 0,
+// waitingArray: [[0, 1], [null, 0], [0, 1] null , 0, null , 1, null, 1, null, 2, null, 2, null],
+// waitingColor: [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
 
 
 // ==== HELPERS ====
