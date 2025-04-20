@@ -7,16 +7,13 @@ html {
 
 body {
     background-color: #b5d1cc;
-    /* text-align: center; */
 }
 
 main {
     margin: 40px auto;
-
   }
 
   #calculator {
-    /* border: 2px solid ; */
     width: 900px;
     padding: 30px 50px;
     border-radius: 10px;
@@ -54,14 +51,11 @@ main {
     margin-top: 0px
     }
 
-.displayLabel {
-    /* border: 2px solid white; */
+#calculator .displayLabel {
     color: white;
     font-family: tempting;
     font-weight: 100;
     font-size: 1.3em;
-    /* padding-right: 20px; */
-    /* margin-top: -8px; */
 }
 
 .led {
@@ -72,14 +66,12 @@ main {
     width: 16px;
     height: 16px;
     border-radius: 8px;
-    /* border: 2px solid red; */
     margin: 0 10px; 
 }
 
 
 
 .display {
-    /* border: 2px solid red */
     display: inline-block;
     width: 225px;
     height: 50px;

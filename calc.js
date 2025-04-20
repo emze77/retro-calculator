@@ -10,8 +10,10 @@ const STATS = {
     leds: [1, 1],
     blinkingPhase: false,
     waitingCounter: 0,
-    waitingArray: [],
+    blinkingArray: [],
 }
+
+const originalStats = structuredClone(STATS);
 
 const TIMEOUTS = {
     waiting: undefined,
@@ -28,9 +30,6 @@ const LED = {
     }
 }
 
-const originalStats = structuredClone(STATS);
-// let waiting_STATS = {};
-
 const DISPLAY = {
     firstOperator: document.querySelector("#firstOperatorDisplay"),
     secondOperator: document.querySelector("#secondOperatorDisplay"),
@@ -43,7 +42,7 @@ const ERROR = {
 }
 
 
-// === BUTTONS ===
+// === BUTTONS, KEYS & PAGELOAD ===
 
 const operatorButton = document.querySelectorAll(".operatorButton");
 
@@ -65,15 +64,17 @@ document.addEventListener('keydown', (el) => {
         appendNumber(el.key)
     } else if (el.key === "Enter") {
         handleAccept();
-    } else if (el.key === "/" || 
-        el.key === "*" || 
-        el.key === "+" ||
-        el.key === "-") {
+    } else if (["/", "*", "x", "+", "-"].includes(el.key)) {
         setOperator(el.key)    
         }
     })
 
+window.addEventListener('load', () => {
+    switchInputToFirstOp ();
+    waitingTimer();
+})
 
+// === LOGIC ===
 
 function operate () {
     calculate();
@@ -201,7 +202,7 @@ function colorOperator (operator) {
     })
 }
 
-// ==== WAITING =====
+// === WAITING-MODE ===
 
 function waitingTimer () {
     if (STATS.blinkingPhase) {
@@ -214,15 +215,14 @@ function waitingTimer () {
     TIMEOUTS.waiting = setTimeout(createBlinkTable, 10000);
 }
 
-
 function createBlinkTable () {
-    STATS.waitingArray = [];
+    STATS.blinkingArray = [];
     let twoTimes = false;
     for (i = 1; i <= 13; i++) {
         if (!(i % 2)) {
-            STATS.waitingArray.push([null, 0]);
+            STATS.blinkingArray.push([null, 0]);
         } else {
-            STATS.waitingArray.push([STATS.leds[0], STATS.leds[1]]);
+            STATS.blinkingArray.push([STATS.leds[0], STATS.leds[1]]);
             if (twoTimes) {
                 STATS.leds[0]++;
                 if (STATS.leds[0] === 3) STATS.leds[0] = 0;
@@ -232,15 +232,14 @@ function createBlinkTable () {
             }
         }
     }
-    twoTimes = false;
     waiting();
 }
 
-function waiting (numberCache, colorCache) {
+function waiting () {
     STATS.blinkingPhase = true;
     toggleLed(
-        STATS.waitingArray[STATS.waitingCounter][0], 
-        STATS.waitingArray[STATS.waitingCounter][1]);
+        STATS.blinkingArray[STATS.waitingCounter][0], 
+        STATS.blinkingArray[STATS.waitingCounter][1]);
     if (STATS.waitingCounter < 12) {
         STATS.waitingCounter++;
         TIMEOUTS.impuls = setTimeout(waiting, 500);
@@ -252,9 +251,9 @@ function waiting (numberCache, colorCache) {
 }
 
 function clearWaiting () {
-    toggleLed(STATS.waitingArray[0][0], STATS.waitingArray[0][1]);
+    toggleLed(STATS.blinkingArray[0][0], STATS.blinkingArray[0][1]);
     STATS.waitingCounter = 0;
-    STATS.waitingArray = [];
+    STATS.blinkingArray = [];
     STATS.blinkingPhase = false;
     waitingTimer();
 }
