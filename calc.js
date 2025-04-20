@@ -1,3 +1,5 @@
+// === OBJECTS ===
+
 const STATS = {
     inputFirstOperator: true,
     operator: null,
@@ -6,7 +8,7 @@ const STATS = {
     secondOperator: "",
     result: "",
     leds: [1, 1],
-    waitingPhase: false,
+    blinkingPhase: false,
     waitingCounter: 0,
     waitingArray: [],
 }
@@ -27,7 +29,7 @@ const LED = {
 }
 
 const originalStats = structuredClone(STATS);
-let waiting_STATS = {};
+// let waiting_STATS = {};
 
 const DISPLAY = {
     firstOperator: document.querySelector("#firstOperatorDisplay"),
@@ -35,27 +37,42 @@ const DISPLAY = {
     result: document.querySelector("#resultDisplay"),
 }
 
-
-
 const ERROR = {
     toolong: "too long!",
     divide0: "Don't do this!"
 }
 
+
+// === BUTTONS ===
+
 const operatorButton = document.querySelectorAll(".operatorButton");
 
+document.querySelectorAll(".button").forEach(button =>
+    button.addEventListener('click', () => waitingTimer()))
 operatorButton.forEach(button =>
     button.addEventListener('click', () => setOperator(button.textContent)));
 document.querySelectorAll(".numberButton").forEach(button => 
     button.addEventListener('click', () => appendNumber(button.textContent)));
-document.querySelectorAll(".button").forEach(button =>
-    button.addEventListener('click', () => waitingTimer()))
 
 onClick ("#btnDot", () => appendNumber("."));
 onClick ("#btnTakeOver", takeResultForFirstOp);
 onClick ("#btnClear", clear);
 onClick ("#btnDelete", deleteNumber);
 onClick ("#btnAccept", handleAccept)
+
+document.addEventListener('keydown', (el) => {
+    if (!isNaN(el.key)) {
+        appendNumber(el.key)
+    } else if (el.key === "Enter") {
+        handleAccept();
+    } else if (el.key === "/" || 
+        el.key === "*" || 
+        el.key === "+" ||
+        el.key === "-") {
+        setOperator(el.key)    
+        }
+    })
+
 
 
 function operate () {
@@ -87,11 +104,9 @@ function handleAccept () {
 
 function takeResultForFirstOp () {
     if (STATS.resultMode && !isNaN(Number(STATS.result))) {
-        console.table(STATS);
         let cache = STATS.result;
         clear();
         STATS.firstOperator = cache;
-        console.table(STATS);
         updateDisplay();
         switchInputToSecOp();
     }
@@ -111,6 +126,7 @@ function appendNumber (number) {
 }
 
 function setOperator (operator) {
+    if (operator === "*") operator = "x";
     STATS.operator = operator;
     colorOperator(operator);
     if (STATS.firstOperator.length > 0) switchInputToSecOp();
@@ -188,22 +204,22 @@ function colorOperator (operator) {
 // ==== WAITING =====
 
 function waitingTimer () {
-    if (typeof TIMEOUTS.waiting === "number")
-        clearTimeout(TIMEOUTS.waiting)
-    if (STATS.waitingPhase) {
+    if (STATS.blinkingPhase) {
         if (typeof TIMEOUTS.impuls === "number") 
             clearTimeout(TIMEOUTS.impuls);
+        clearWaiting();
     }
-    waiting_STATS = structuredClone(STATS);
-    createBlinkTable();
-    TIMEOUTS.waiting = setTimeout(waiting, 5000);
+    if (typeof TIMEOUTS.waiting === "number")
+        clearTimeout(TIMEOUTS.waiting)
+    TIMEOUTS.waiting = setTimeout(createBlinkTable, 10000);
 }
+
 
 function createBlinkTable () {
     STATS.waitingArray = [];
     let twoTimes = false;
-    for (i = 0; i <= 12; i++) {
-        if (i % 2) {
+    for (i = 1; i <= 13; i++) {
+        if (!(i % 2)) {
             STATS.waitingArray.push([null, 0]);
         } else {
             STATS.waitingArray.push([STATS.leds[0], STATS.leds[1]]);
@@ -216,12 +232,12 @@ function createBlinkTable () {
             }
         }
     }
-    console.table(STATS.waitingArray);
     twoTimes = false;
+    waiting();
 }
 
 function waiting (numberCache, colorCache) {
-    STATS.waitingPhase = true;
+    STATS.blinkingPhase = true;
     toggleLed(
         STATS.waitingArray[STATS.waitingCounter][0], 
         STATS.waitingArray[STATS.waitingCounter][1]);
@@ -231,21 +247,17 @@ function waiting (numberCache, colorCache) {
     } else {
         if (typeof TIMEOUTS.impuls === "number") {
             clearTimeout(TIMEOUTS.impuls)}
-        STATS.waitingCounter = 0;
-        STATS.waitingArray = [];
-        STATS.waitingPhase = false;
-        toggleLed(waiting_STATS.leds[0], waiting_STATS.leds[1]);
+        clearWaiting();
     }
 }
 
-
-// i = STATs.leds[0]; i <= 12; i++ 
-// jedes zweite: [null, 0],
-// dazwischen: 
-// waitingCounter: 0,
-// waitingArray: [[0, 1], [null, 0], [0, 1] null , 0, null , 1, null, 1, null, 2, null, 2, null],
-// waitingColor: [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
-
+function clearWaiting () {
+    toggleLed(STATS.waitingArray[0][0], STATS.waitingArray[0][1]);
+    STATS.waitingCounter = 0;
+    STATS.waitingArray = [];
+    STATS.blinkingPhase = false;
+    waitingTimer();
+}
 
 // ==== HELPERS ====
 
@@ -266,7 +278,7 @@ function switchInputToSecOp () {
 
 function resultDisplayOn (state) {
     STATS.resultMode = state
-    if (state) toggleLed(0, 1);
+    if (state) toggleLed(0, [STATS.leds[1]]);
 }
 
 function throwErrow (error) {
