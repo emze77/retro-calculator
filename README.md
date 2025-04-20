@@ -1,4 +1,4 @@
-# retro-calculator
+# RETRO CALCULATOR
 Interpretation of The Odin Project calculator project.
 
 ## Features:
