@@ -53,7 +53,7 @@ operatorButton.forEach(button =>
 document.querySelectorAll(".numberButton").forEach(button => 
     button.addEventListener('click', () => appendNumber(button.textContent)));
 
-onClick ("#btnDot", () => appendNumber("."));
+onClick ("#btnDot", () => checkdot());
 onClick ("#btnTakeOver", takeResultForFirstOp);
 onClick ("#btnClear", clear);
 onClick ("#btnDelete", deleteNumber);
@@ -64,6 +64,8 @@ document.addEventListener('keydown', (el) => {
         appendNumber(el.key)
     } else if (el.key === "Enter") {
         handleAccept();
+    } else if (el.key === ".") {
+        checkdot();
     } else if (["/", "*", "x", "+", "-"].includes(el.key)) {
         setOperator(el.key)    
     }
@@ -112,6 +114,14 @@ function takeResultForFirstOp () {
         updateDisplay();
         switchInputToSecOp();
     }
+}
+
+
+function checkdot () {
+    if (STATS.inputFirstOperator && !(STATS.firstOperator.indexOf(".") > -1))
+        appendNumber(".");
+    if (!STATS.inputFirstOperator && !(STATS.secondOperator.indexOf(".") > -1))
+        appendNumber(".");
 }
 
 function appendNumber (number) {
