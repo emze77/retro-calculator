@@ -47,7 +47,7 @@ const ERROR = {
 const operatorButton = document.querySelectorAll(".operatorButton");
 
 document.querySelectorAll(".button").forEach(button =>
-    button.addEventListener('click', () => waitingTimer()))
+    button.addEventListener('click', () => resetWaitingTimer()))
 operatorButton.forEach(button =>
     button.addEventListener('click', () => setOperator(button.textContent)));
 document.querySelectorAll(".numberButton").forEach(button => 
@@ -69,12 +69,12 @@ document.addEventListener('keydown', (el) => {
     } else if (["/", "*", "x", "+", "-"].includes(el.key)) {
         setOperator(el.key)    
     }
-    waitingTimer();
+    resetWaitingTimer();
     })
 
 window.addEventListener('load', () => {
     switchInputToFirstOp ();
-    waitingTimer();
+    resetWaitingTimer();
 })
 
 // === LOGIC ===
@@ -116,7 +116,6 @@ function takeResultForFirstOp () {
     }
 }
 
-
 function checkdot () {
     if (STATS.inputFirstOperator && !(STATS.firstOperator.indexOf(".") > -1))
         appendNumber(".");
@@ -127,12 +126,14 @@ function checkdot () {
 function appendNumber (number) {
     if (STATS.resultMode) clear();
     if (STATS.inputFirstOperator && STATS.firstOperator.length < 10) {
-        if (STATS.firstOperator.length === 0 && number === "0") return;
+        if (STATS.firstOperator.length === 1 && STATS.firstOperator.charAt(0) === "0")
+            deleteNumber();
         STATS.firstOperator += number;
         if (STATS.firstOperator.length === 10) toggleLed(1, 2);
     }
     if (!STATS.inputFirstOperator && STATS.secondOperator.length < 10) {
-        if (STATS.secondOperator.length === 0 && number === "0") return;
+        if (STATS.secondOperator.length === 1 && STATS.secondOperator.charAt(0) === "0")
+            deleteNumber();
         STATS.secondOperator += number;
         if (STATS.secondOperator.length === 10) toggleLed(2, 2);
     }
@@ -217,7 +218,7 @@ function colorOperator (operator) {
 
 // === WAITING-MODE ===
 
-function waitingTimer () {
+function resetWaitingTimer () {
     if (STATS.blinkingPhase) {
         if (typeof TIMEOUTS.impuls === "number") 
             clearTimeout(TIMEOUTS.impuls);
@@ -225,7 +226,12 @@ function waitingTimer () {
     }
     if (typeof TIMEOUTS.waiting === "number")
         clearTimeout(TIMEOUTS.waiting)
-    TIMEOUTS.waiting = setTimeout(createBlinkTable, 10000);
+    TIMEOUTS.waiting = setTimeout(startBlinking, 10000);
+}
+
+function startBlinking () {
+    createBlinkTable ();
+    waiting ();
 }
 
 function createBlinkTable () {
@@ -245,7 +251,6 @@ function createBlinkTable () {
             }
         }
     }
-    waiting();
 }
 
 function waiting () {
@@ -268,7 +273,7 @@ function clearWaiting () {
     STATS.waitingCounter = 0;
     STATS.blinkingArray = [];
     STATS.blinkingPhase = false;
-    waitingTimer();
+    resetWaitingTimer();
 }
 
 // ==== HELPERS ====
