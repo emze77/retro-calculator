@@ -223,6 +223,7 @@ function resetWaitingTimer () {
         if (typeof TIMEOUTS.impuls === "number") 
             clearTimeout(TIMEOUTS.impuls);
         clearWaiting();
+        resetWaitingTimer();
     }
     if (typeof TIMEOUTS.waiting === "number")
         clearTimeout(TIMEOUTS.waiting)
@@ -265,6 +266,7 @@ function waiting () {
         if (typeof TIMEOUTS.impuls === "number") {
             clearTimeout(TIMEOUTS.impuls)}
         clearWaiting();
+        resetWaitingTimer();
     }
 }
 
@@ -273,7 +275,6 @@ function clearWaiting () {
     STATS.waitingCounter = 0;
     STATS.blinkingArray = [];
     STATS.blinkingPhase = false;
-    resetWaitingTimer();
 }
 
 // ==== HELPERS ====
