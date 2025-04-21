@@ -1,78 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-<style>
+  <style>
     @font-face {
-        font-family: digital7;
-        src: url(./fonts/digital-7.ttf);
+      font-family: digital7;
+      src: url(./fonts/digital-7.ttf);
     }
     @font-face {
-        font-family: tempting;
-        src: url("./fonts/Tempting\ -\ PERSONAL\ USE\ ONLY.ttf")
+      font-family: tempting;
+      src: url("./fonts/Tempting\ -\ PERSONAL\ USE\ ONLY.ttf");
     }
-</style>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+  </style>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
     <title>Retro Calculator</title>
-</head>
-<body>
-
-<main id="calculator">
-    <section id="firstRow">
+  </head>
+  <body>
+    <main id="calculator">
+      <section id="firstRow">
         <button class="button medButton" id="btnDot">.</button>
         <button class="button medButton" id="btnTakeOver">&#8659;</button>
         <div class="displayFrame">
-            <p class="displayLabel">
-                <span class="led ledResult"></span>
-                Result
-                <span class="led ledResult"></span>
-            </p>
-            <div class="display" id="resultDisplay"></div>
+          <p class="displayLabel">
+            <span class="led ledResult"></span>
+            Result
+            <span class="led ledResult"></span>
+          </p>
+          <div class="display" id="resultDisplay"></div>
         </div>
         <button class="button medButton" id="btnClear">CLR</button>
         <button class="button medButton" id="btnDelete">DEL</button>
-    </section>
-    <section id="secondRow">
+      </section>
+      <section id="secondRow">
         <div class="displayFrame">
-            <p class="displayLabel">
-                <span class="led ledFirstOperator"></span>
-                first operator
-                <span class="led ledFirstOperator"></span>
-            </p>
-            <div class="display" id="firstOperatorDisplay"></div>
+          <p class="displayLabel">
+            <span class="led ledFirstOperator"></span>
+            first operator
+            <span class="led ledFirstOperator"></span>
+          </p>
+          <div class="display" id="firstOperatorDisplay"></div>
         </div>
         <button class="button operatorButton" id="btnAdd">+</button>
         <button class="button operatorButton" id="btnSubstract">-</button>
         <button class="button operatorButton" id="btnMultiply">x</button>
         <button class="button operatorButton" id="btnDivide">/</button>
         <div class="displayFrame">
-            <p class="displayLabel">
-                <span class="led ledSecondOperator"></span>
-                second operator
-                <span class="led ledSecondOperator"></span>
-            </p>
-            <div class="display" id="secondOperatorDisplay"></div>
+          <p class="displayLabel">
+            <span class="led ledSecondOperator"></span>
+            second operator
+            <span class="led ledSecondOperator"></span>
+          </p>
+          <div class="display" id="secondOperatorDisplay"></div>
         </div>
-    </section>
-    <section id="thirdRow">
-            <button class="button numberButton" id="btn0">0</button>
-            <button class="button numberButton" id="btn1">1</button>
-            <button class="button numberButton" id="btn2">2</button>
-            <button class="button numberButton" id="btn3">3</button>
-            <button class="button numberButton" id="btn4">4</button>
-            <button class="button numberButton" id="btn5">5</button>
-            <button class="button numberButton" id="btn6">6</button>
-            <button class="button numberButton" id="btn7">7</button>
-            <button class="button numberButton" id="btn8">8</button>
-            <button class="button numberButton" id="btn9">9</button>
-            <button class="button" id="btnAccept">&#10004;</button>
-    </section>
-</main>
-<footer>
-
-</footer>
-<script src="calc.js"></script>
-
-</body>
+      </section>
+      <section id="thirdRow">
+        <button class="button numberButton" id="btn0">0</button>
+        <button class="button numberButton" id="btn1">1</button>
+        <button class="button numberButton" id="btn2">2</button>
+        <button class="button numberButton" id="btn3">3</button>
+        <button class="button numberButton" id="btn4">4</button>
+        <button class="button numberButton" id="btn5">5</button>
+        <button class="button numberButton" id="btn6">6</button>
+        <button class="button numberButton" id="btn7">7</button>
+        <button class="button numberButton" id="btn8">8</button>
+        <button class="button numberButton" id="btn9">9</button>
+        <button class="button" id="btnAccept">&#10004;</button>
+      </section>
+    </main>
+    <footer></footer>
+    <script src="calc.js"></script>
+  </body>
 </html>

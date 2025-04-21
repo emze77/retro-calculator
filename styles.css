@@ -1,130 +1,135 @@
 html {
-    box-sizing: border-box;
-  }
-  *, *:before, *:after {
-    box-sizing: inherit;
-  }
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
 
 body {
-    background-color: #b5d1cc;
+  background-color: #b5d1cc;
 }
 
 main {
-    margin: 40px auto;
-  }
+  margin: 40px auto;
+}
 
-  #calculator {
-    width: 900px;
-    padding: 30px 50px;
-    border-radius: 10px;
-    background-image: url("./img/brushed-black-metal.jpg");
-    box-shadow: inset 0 0 60px #1b1b1b,
-                0 0 15px #242424 ;
-    font-weight: 600;
-    padding-bottom: 60px
-  }
+#calculator {
+  width: 900px;
+  padding: 30px 50px;
+  border-radius: 10px;
+  background-image: url("./img/brushed-black-metal.jpg");
+  box-shadow: inset 0 0 60px #1b1b1b, 0 0 15px #242424;
+  font-weight: 600;
+  padding-bottom: 60px;
+}
 
-#firstRow, #secondRow, #thirdRow {
-    text-align: center;
-    vertical-align: bottom;;
-    margin: 10px 0;
-    padding: 0;
+#firstRow,
+#secondRow,
+#thirdRow {
+  text-align: center;
+  vertical-align: bottom;
+  margin: 10px 0;
+  padding: 0;
 }
 
 #thirdRow {
-    margin-top: 35px;
+  margin-top: 35px;
 }
 
 #firstRow {
-    margin-bottom: -15px
+  margin-bottom: -15px;
 }
 
-.displayFrame, .button {
-    margin: 8px;
-    vertical-align: bottom;
+.displayFrame,
+.button {
+  margin: 8px;
+  vertical-align: bottom;
 }
 
 .displayFrame {
-    display: inline-block;
-    height: 125px;
-    margin-bottom: 5px;
-    margin-top: 0px
-    }
+  display: inline-block;
+  height: 125px;
+  margin-bottom: 5px;
+  margin-top: 0px;
+}
 
 #calculator .displayLabel {
-    color: white;
-    font-family: tempting;
-    font-weight: 100;
-    font-size: 1.3em;
+  color: white;
+  font-family: tempting;
+  font-weight: 100;
+  font-size: 1.3em;
 }
 
 .led {
-    display: inline-block;
-    border: 1px solid black;
-    background-color: rgb(27, 27, 27);
-    box-shadow: inset 0 0 6px black;
-    width: 16px;
-    height: 16px;
-    border-radius: 8px;
-    margin: 0 10px; 
+  display: inline-block;
+  border: 1px solid black;
+  background-color: rgb(27, 27, 27);
+  box-shadow: inset 0 0 6px black;
+  width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  margin: 0 10px;
 }
 
-
-
 .display {
-    display: inline-block;
-    width: 225px;
-    height: 50px;
-    line-height: 100%;
-    background-color: #afab99;
-    box-shadow: inset 0 0 7px  #4a4737;
-    color: #4a4737;
-    font-family: digital7;
-    text-align: end;
-    font-size: 2em;
-    padding-right: 12px;
-  }
+  display: inline-block;
+  width: 225px;
+  height: 50px;
+  line-height: 100%;
+  background-color: #afab99;
+  box-shadow: inset 0 0 7px #4a4737;
+  color: #4a4737;
+  font-family: digital7;
+  text-align: end;
+  font-size: 2em;
+  padding-right: 12px;
+}
 
 #resultDisplay {
-    width: 260px
+  width: 260px;
 }
 
 .button {
-    color: white;
-    background: rgba(0,0,0,0.1);
-    border-radius: 4px;
-    box-shadow: inset 0 0 7px  #2c2c2c;
-    font-weight: 600px;
+  color: white;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  box-shadow: inset 0 0 7px #2c2c2c;
+  font-weight: 600px;
 }
 
 .medButton {
-    width: 105px;
-    height:50px;
+  width: 105px;
+  height: 50px;
 }
 
-.operatorButton, .numberButton, #btnAccept {
-    width: 50px;
-    height:50px;
+.operatorButton,
+.numberButton,
+#btnAccept {
+  width: 50px;
+  height: 50px;
 }
 
 #btnAccept {
-    background-color: rgba(55, 170, 55, 0.5);
-    box-shadow: inset 0 0 6px green;
+  background-color: rgba(55, 170, 55, 0.5);
+  box-shadow: inset 0 0 6px green;
 }
 
-#btnTakeOver, #btnDot {
-    font-size: 1.5em;
+#btnTakeOver,
+#btnDot {
+  font-size: 1.5em;
 }
 
 .highlightButton {
-    border: 2px solid green;
-    box-shadow: inset 0 0 6px green;
+  border: 2px solid green;
+  box-shadow: inset 0 0 6px green;
 }
 
 .green {
-    background-color: green;
+  background-color: green;
 }
 
 .red {
-    background-color: red;
+  background-color: red;
 }
